@@ -6,12 +6,13 @@ Open `dist/index.html` directly, or serve `dist` with any static server. From th
 
 ## Using the tracker
 
-- Explore the sample budget, then select **Start your own** and enter your current balance.
+- Start with an empty budget and use **Add money** to enter your balance. The sample budget is optional under **Budget settings**.
+- Use **Choose sections** to opt into forecasts, upcoming payments, spending categories, goals, or recent activity on the overview. All optional sections start hidden, and selections persist in this browser.
 - Log spending and mark it as essential or nice to have. Add income in **My spending**.
 - Add monthly or weekly subscriptions and one-time debts. Mark payments paid only after you pay them.
 - Create savings goals and reserve money toward them. Reserved money is excluded from safe-to-spend totals.
 - Use the 7- or 30-day forecast to see the money left after scheduled charges. Reminders have no dismiss action; they remain until the payment is recorded or the underlying entry is removed.
-- Select the profile button to manage the workspace or load the sample again.
+- Select **Budget settings** to start a new budget or load the sample.
 
 ## Calculations and storage
 

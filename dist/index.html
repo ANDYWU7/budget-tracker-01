@@ -4,16 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#244e40">
-  <meta name="description" content="A little clarity for your money. Track spending, plan for bills, and save for what matters with Pocket.">
-  <title>Pocket — Make room for what matters</title>
+  <meta name="description" content="Track spending, subscriptions, debts, and savings.">
+  <title>Pocket — Budget tracker</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23244e40'/%3E%3Cpath d='M8 9h16v10q-8 10-16 0Z' fill='none' stroke='%23dcedb0' stroke-width='2.5'/%3E%3Cpath d='m13 15 3 3 4-5' fill='none' stroke='%23dcedb0' stroke-width='2'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css">
   <script src="app.js" defer></script>
 </head>
 <body>
   <aside class="sidebar">
-    <a href="#overview" class="brand" aria-label="Pocket home"><span class="brand-icon" data-icon="pocket"></span>pocket<span class="brand-dot">.</span></a>
-    <div class="workspace-label">YOUR MONEY, YOUR WAY</div>
+    <div class="brand"><span class="brand-icon" data-icon="pocket"></span>pocket<span class="brand-dot">.</span></div>
     <nav aria-label="Main navigation">
       <a href="#overview" data-nav="overview"><span data-icon="overview"></span>Overview</a>
       <a href="#spending" data-nav="spending"><span data-icon="wallet"></span>My spending</a>
@@ -21,15 +20,10 @@
       <a href="#debts" data-nav="debts"><span data-icon="receipt"></span>Debts & dues</a>
       <a href="#goals" data-nav="goals"><span data-icon="target"></span>Savings goals</a>
     </nav>
-    <div class="sidebar-bottom">
-      <div class="small-note"><span data-icon="sprout"></span><h3>Small steps. Big things.</h3><p>Every thoughtful choice gets you closer to what matters.</p></div>
-      <button class="profile" data-action="workspace"><span class="avatar">Y</span><span><strong>Your pocket</strong><small>Personal workspace</small></span><span data-icon="settings"></span></button>
-    </div>
   </aside>
   <div class="shell">
-    <header class="topbar"><div class="breadcrumb">My workspace <span>/</span> <strong id="page-label">Overview</strong></div><div class="top-actions"><span class="local-badge"><span></span>Saved on this device</span><button class="icon-button" aria-label="View reminders" data-action="reminders"><span data-icon="bell"></span><i id="notification-dot"></i></button><button class="top-avatar" aria-label="Manage your workspace" data-action="workspace">Y</button></div></header>
+    <header class="topbar"><span class="local-badge">Saved on this device</span><div class="top-actions"><button class="text-button reminder-button" data-action="reminders">Reminders <span id="notification-dot" aria-label="Payments due within 7 days">•</span></button><button class="text-button" data-action="workspace">Budget settings</button></div></header>
     <main id="main" tabindex="-1"></main>
-    <footer><span class="footer-brand">pocket.</span> A little clarity. A lot more possibility.<span class="footer-right">Made for your everyday.</span></footer>
   </div>
   <dialog id="modal" aria-labelledby="modal-title"><div id="modal-content"></div></dialog>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
