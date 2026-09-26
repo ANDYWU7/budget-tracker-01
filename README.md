@@ -2,7 +2,11 @@
 
 A responsive, kid-friendly budget tracker built with only HTML, CSS, and JavaScript. No packages, frameworks, external fonts, or network calls are required.
 
+**Live site:** https://andywu7.github.io/budget-tracker-01/
+
 Open `dist/index.html` directly, or serve `dist` with any static server. From the parent workspace, `node preview.cjs` serves it at http://127.0.0.1:4173.
+
+Every push to `main` automatically publishes the contents of `dist` to GitHub Pages.
 
 ## Using the tracker
 
