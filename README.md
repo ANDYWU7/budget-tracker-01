@@ -14,7 +14,7 @@ Open `dist/index.html` directly, or serve `dist` with any static server. From th
 - Log spending and mark it as essential or nice to have. Add income in **My spending**.
 - Add monthly or weekly subscriptions and one-time debts. Mark payments paid only after you pay them.
 - Create savings goals and reserve money toward them. Reserved money is excluded from safe-to-spend totals.
-- Use the 7- or 30-day forecast to see the money left after scheduled charges. Reminders have no dismiss action; they remain until the payment is recorded or the underlying entry is removed.
+- Use the 7-day, 30-day, or one-year forecast to see the money left after scheduled charges. The **Past** range shows the previous seven days of cash balance, based on dated income and expenses. A "3 days ago" value also appears beside the forecast; days before tracking began show no value. Past savings reservations are not included because goal contributions do not have dates. Reminders have no dismiss action; they remain until the payment is recorded or the underlying entry is removed.
 - Select **Budget settings** to start a new budget or load the sample.
 
 ## Calculations and storage
