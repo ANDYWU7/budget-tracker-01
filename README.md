@@ -7,7 +7,10 @@ Open `dist/index.html` directly, or serve `dist` with any static server. From th
 ## Using the tracker
 
 - Start with an empty budget and use **Add money** to enter your balance. The sample budget is optional under **Budget settings**.
-- Use **Choose sections** to opt into forecasts, upcoming payments, spending categories, goals, or recent activity on the overview. All optional sections start hidden, and selections persist in this browser.
+- Daily spending bars and a category pie chart appear directly on the overview. Choose **Last 7 days** or **This month** to change both charts together. Paid subscriptions have their own slice; unpaid charges are excluded from spent totals. Both charts update from recorded expenses, including payment records.
+- Savings progress shows four checkpoints at 25%, 50%, 75%, and 100% of a selected goal. Adding savings across a checkpoint triggers a milestone message; withdrawing savings updates progress too.
+- The forecast, upcoming payments, and recent activity appear by default below the main visuals. Use **Choose sections** to hide or restore any of them. Selections persist in this browser.
+- Each tracker page initially shows a short list. **Show more** reveals additional records when needed.
 - Log spending and mark it as essential or nice to have. Add income in **My spending**.
 - Add monthly or weekly subscriptions and one-time debts. Mark payments paid only after you pay them.
 - Create savings goals and reserve money toward them. Reserved money is excluded from safe-to-spend totals.

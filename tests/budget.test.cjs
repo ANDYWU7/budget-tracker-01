@@ -2,23 +2,33 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 const assert = require('node:assert/strict');
 const elements = new Map();
+const storage = new Map();
 const element = () => ({innerHTML:'',textContent:'',hidden:false,value:'',dataset:{},classList:{add(){},remove(){},toggle(){}},addEventListener(){},setAttribute(){},removeAttribute(){}});
 const context = vm.createContext({
   console, Intl, Date, Math, Number, String, Object, Array, Error, Promise, AbortController,
   setTimeout, clearTimeout,
   location:{hash:'#overview'},
-  localStorage:{getItem:()=>null,setItem(){}},
+  localStorage:{getItem:key=>storage.get(key)??null,setItem:(key,value)=>storage.set(key,value)},
   document:{querySelector(selector){if(!elements.has(selector))elements.set(selector,element());return elements.get(selector);},querySelectorAll:()=>[],addEventListener(){}},
   window:{addEventListener(){},scrollTo(){}},
 });
+vm.runInContext(fs.readFileSync(require('node:path').join(__dirname,'../dist/visuals.js'),'utf8'),context);
 vm.runInContext(fs.readFileSync(require('node:path').join(__dirname,'../dist/app.js'),'utf8'),context);
 const run = code => vm.runInContext(code,context);
 assert.equal(run('balance()'),0,'New users start with an empty budget');
-assert.doesNotMatch(run('overview()'),/class="forecast-chart"|Recent activity|Spending by category/);
+assert.deepEqual(Array.from(run('visibleSections')),['forecast','upcoming','activity']);
+assert.match(run('overview()'),/Balance forecast/);
+assert.match(run('overview()'),/Upcoming payments/);
+assert.match(run('overview()'),/Recent activity/);
+assert.match(run('overview()'),/Spent each day/);
+assert.match(run('overview()'),/What you spent on/);
 run("visibleSections=['forecast','activity']");
 assert.match(run('overview()'),/class="forecast-chart"/);
 assert.match(run('overview()'),/Recent activity/);
-assert.doesNotMatch(run('overview()'),/Spending by category/);
+assert.doesNotMatch(run('overview()'),/<h2>Upcoming payments/);
+assert.doesNotMatch(run('overview()'),/<h2>Spending by category/);
+storage.set('pocket-overview-sections-v2',JSON.stringify(['forecast']));
+assert.deepEqual(Array.from(run('loadSections()')),['forecast']);
 run("visibleSections=[];state=seed()");
 assert.equal(run('balance()'),103552);
 assert.equal(run('saved()'),28000);
@@ -49,7 +59,38 @@ assert.equal(run('balance()'),101052);
 assert.equal(run('safe(30)'),72154,'Paying a reserved debt must not double-deduct safe spending');
 run('state={version:1,demo:false,opening:0,incomes:[],expenses:[],subscriptions:[],debts:[],goals:[]}');
 assert.equal(run('safe(30)'),0);
-assert.match(run('overview()'),/Choose which sections/);
+assert.match(run('overview()'),/More details/);
+assert.doesNotMatch(run('overview()'),/Recent activity/);
 assert.match(run('transactionTable([],true)'),/No activity/);
 assert.doesNotMatch(run("transactionTable([{id:'p',name:'Paid debt',amount:100,date:today(),category:'Other',kind:'need',payment:{id:'d'}}],true)"),/data-action="remove-transaction"/);
-console.log('Passed: balance, forecast, debt payment, savings reservation, monthly anchoring, leap year, weekly recurrence, overdue charges, amount/date validation, and empty state.');
+run('state=seed()');
+assert.equal(run('spendingData().total'),21448);
+assert.equal(run('sum(spendingData().days)'),21448);
+assert.equal(run('sum(spendingData().groups)'),21448);
+assert.equal(run('spendingData().days.length'),7);
+run("state.expenses.push({id:'subpay',name:'Music plan',amount:599,category:'Entertainment',date:today(),payment:{type:'subscription'}})");
+assert.equal(run('spendingData().total'),22047);
+assert.equal(run("spendingData().groups.find(g=>g.name==='Subscriptions').amount"),599);
+assert.equal(run("spendingData().groups.find(g=>g.name==='Entertainment').amount"),2100,'Paid subscriptions must not also count in their original category');
+assert.equal(run('spendingData().days.at(-1).amount'),2449);
+run("state.expenses.push({id:'manualsub',amount:299,category:'Subscriptions',date:today()});state.expenses.push({id:'old',amount:10000,category:'Food',date:dateAdd(today(),-7)})");
+assert.equal(run('spendingData().total'),22346,'Exclude spending outside the selected period');
+assert.equal(run("spendingData().groups.find(g=>g.name==='Subscriptions').amount"),898);
+run("state.expenses=state.expenses.filter(e=>e.id!=='manualsub')");
+assert.equal(run('spendingData().total'),22047,'Deleting an expense updates chart totals');
+assert.equal(run("spendingData('month').total"),run("sum(state.expenses.filter(e=>e.date.startsWith(today().slice(0,7))&&e.date<=today()))"));
+assert.equal(run('goalMilestone({saved:2499,target:10000})'),0);
+assert.equal(run('goalMilestone({saved:2500,target:10000})'),1);
+assert.equal(run('goalMilestone({saved:7500,target:10000})'),3);
+assert.equal(run('goalMilestone({saved:12000,target:10000})'),4);
+run('state=blankBudget()');
+assert.equal(run('spendingData().groups.length'),0);
+assert.equal(run('spendingData().days.length'),7);
+assert.doesNotMatch(run('spendingVisuals()'),/NaN|Infinity/);
+run("state=seed();location.hash='#spending';render()");
+assert.equal((elements.get('#main').innerHTML.match(/<tr>/g)||[]).length,6,'Spending initially shows five records and a header');
+assert.match(elements.get('#main').innerHTML,/Show more \(2 remaining\)/);
+run('pageLimits.spending+=5;render()');
+assert.equal((elements.get('#main').innerHTML.match(/<tr>/g)||[]).length,8);
+assert.doesNotMatch(elements.get('#main').innerHTML,/Show more/);
+console.log('Passed: budget calculations, recurring dates, validation, chart date ranges, zero days, subscription grouping without double counting, reactive totals, savings milestones, and empty states.');
